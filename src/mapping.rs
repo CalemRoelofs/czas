@@ -4,12 +4,12 @@ use crate::errors::CzasError;
 ///
 /// # Errors
 ///
-/// Will return a [`CzasError`] if not 0 <= `seconds_or_minutes` <= 59
+/// Will return a [`CzasError`] if !(0 <= `seconds_or_minutes` <= 59)
 pub fn seconds_or_minutes_to_polish_nominative(
     seconds_or_minutes: u32,
 ) -> Result<String, CzasError> {
     match seconds_or_minutes {
-        0 => Ok("zero".to_string()),
+        0 => Ok("".to_string()),
         1 => Ok("jeden".to_string()),
         2 => Ok("dwa".to_string()),
         3 => Ok("trzy".to_string()),
@@ -57,7 +57,7 @@ pub fn seconds_or_minutes_to_polish_nominative(
 ///
 /// # Errors
 ///
-/// Will return a [`CzasError`] if not 0 <= `hours` <=23
+/// Will return a [`CzasError`] if not !(0 <= `hours` <= 23)
 pub fn hours_to_polish_locative(hours: u32) -> Result<String, CzasError> {
     match hours {
         0 => Ok("północy".to_string()),
@@ -93,7 +93,7 @@ pub fn hours_to_polish_locative(hours: u32) -> Result<String, CzasError> {
 ///
 /// # Errors
 ///
-/// Will return a [`CzasError`] if not 0 <= `date` <= 31
+/// Will return a [`CzasError`] if !(0 <= `date` <= 31)
 pub fn date_to_polish_genitive(date: u32) -> Result<String, CzasError> {
     match date {
         1 => Ok("pierwszego".to_string()),
@@ -130,7 +130,7 @@ pub fn date_to_polish_genitive(date: u32) -> Result<String, CzasError> {
 ///
 /// # Errors
 ///
-/// Will return a [`CzasError`] if not 1 <= `month` <= 12
+/// Will return a [`CzasError`] if !(1 <= `month` <= 12)
 pub fn month_to_polish_genitive(month: u32) -> Result<String, CzasError> {
     match month {
         1 => Ok("stycznia".to_string()),
