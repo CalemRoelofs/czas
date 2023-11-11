@@ -8,8 +8,8 @@ use crate::errors::CzasError;
 pub fn seconds_or_minutes_to_polish_nominative(
     seconds_or_minutes: u32,
 ) -> Result<String, CzasError> {
-    match seconds_or_minutes {
-        0 => Ok("".to_string()),
+    match seconds_or_minutes % 60 {
+        0 => Ok(String::new()),
         1 => Ok("jeden".to_string()),
         2 => Ok("dwa".to_string()),
         3 => Ok("trzy".to_string()),
@@ -59,7 +59,7 @@ pub fn seconds_or_minutes_to_polish_nominative(
 ///
 /// Will return a [`CzasError`] if not !(0 <= `hours` <= 23)
 pub fn hours_to_polish_locative(hours: u32) -> Result<String, CzasError> {
-    match hours {
+    match hours % 24 {
         0 => Ok("północy".to_string()),
         1 => Ok("pierwszej".to_string()),
         2 => Ok("drugiej".to_string()),
@@ -147,4 +147,104 @@ pub fn month_to_polish_genitive(month: u32) -> Result<String, CzasError> {
         12 => Ok("grudnia".to_string()),
         _ => Err(CzasError::Error),
     }
+}
+
+fn year_ones_to_polish_genetive(year: i32) -> String {
+    match year % 10 {
+        1 => "pierwszego".to_string(),
+        2 => "drugiego".to_string(),
+        3 => "trzeciego".to_string(),
+        4 => "czwartego".to_string(),
+        5 => "piątego".to_string(),
+        6 => "szóstego".to_string(),
+        7 => "siódmego".to_string(),
+        8 => "ósmego".to_string(),
+        9 => "dziewiątego".to_string(),
+        _ => String::new(),
+    }
+}
+
+fn millenium_to_polish_mianownik(year: i32) -> String {
+    match year / 1000 {
+        1 => "tysiąc".to_string(),
+        2 => "dwa tysiące".to_string(),
+        3 => "trzy tysiące".to_string(),
+        4 => "cztery tysiące".to_string(),
+        5 => "pięć tysięcy".to_string(),
+        6 => "sześć tysięcy".to_string(),
+        7 => "siedem tysięcy".to_string(),
+        8 => "osiem tysięcy".to_string(),
+        9 => "dziewięć tysięcy".to_string(),
+        _ => String::new(), // This should never happen.,
+    }
+}
+
+fn century_to_polish_mianownik(year: i32) -> String {
+    match (year % 1000) / 100 {
+        1 => "sto".to_string(),
+        2 => "dwiescie".to_string(),
+        3 => "trzysta".to_string(),
+        4 => "czterysta".to_string(),
+        5 => "pięćset".to_string(),
+        6 => "sześćset".to_string(),
+        7 => "siedemset".to_string(),
+        8 => "osiemset".to_string(),
+        9 => "dziewiąćset".to_string(),
+        _ => String::new(),
+    }
+}
+
+#[allow(clippy::must_use_candidate)]
+pub fn year_to_polish_genetive(year: i32) -> String {
+    let millenium = millenium_to_polish_mianownik(year);
+    let century = century_to_polish_mianownik(year);
+    let tens = year % 100;
+
+    let tens = match tens {
+        1..=9 => year_ones_to_polish_genetive(tens),
+        10 => "dziesiątego".to_string(),
+        11 => "jedenastego".to_string(),
+        12 => "dwunastego".to_string(),
+        13 => "trzynastego".to_string(),
+        14 => "czternastego".to_string(),
+        15 => "piętnastego".to_string(),
+        16 => "szesnastego".to_string(),
+        17 => "siedemnastego".to_string(),
+        18 => "osiemnastego".to_string(),
+        19 => "dziewiętnastego".to_string(),
+        20 => "dwudziestego".to_string(),
+        21..=29 => format!("dwudziestego {}", year_ones_to_polish_genetive(tens - 20)),
+        30 => "trzydziestego".to_string(),
+        31..=39 => format!("trzydziestego {}", year_ones_to_polish_genetive(tens - 30)),
+        40 => "czterdziestego".to_string(),
+        41..=49 => format!("czterdziestego {}", year_ones_to_polish_genetive(tens - 40)),
+        50 => "pięćdziesiątego".to_string(),
+        51..=59 => format!(
+            "pięćdziesiątego {}",
+            year_ones_to_polish_genetive(tens - 50)
+        ),
+        60 => "sześćdziesiątego".to_string(),
+        61..=69 => format!(
+            "sześćdziesiątego {}",
+            year_ones_to_polish_genetive(tens - 60)
+        ),
+        70 => "siedemdziesiątego".to_string(),
+        71..=79 => format!(
+            "siedemdziesiątego  {}",
+            year_ones_to_polish_genetive(tens - 70)
+        ),
+        80 => "osiemdziesiątego".to_string(),
+        81..=89 => format!(
+            "osiemdziesiątego {}",
+            year_ones_to_polish_genetive(tens - 80)
+        ),
+        90 => "dziewięćdziesiątego".to_string(),
+        91..=99 => format!(
+            "dziewiąc dziesiątego {}",
+            year_ones_to_polish_genetive(tens - 90)
+        ),
+        _ => String::new(),
+    };
+
+    format!("{millenium}{century} {tens}")
 }
