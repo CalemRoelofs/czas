@@ -15,6 +15,6 @@ crate-type=["lib","cdylib"]
 name = "czas"
 test = true
 
-[[bin]]
-name = "czas_bin"
-path = "src/bin.rs"
+[[example]]
+name = "run"
+path = "examples/run.rs"
