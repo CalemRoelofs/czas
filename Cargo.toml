@@ -10,6 +10,12 @@ repository = "https://github.com/calemroelofs/czas"
 license = "MIT or Apache-2.0"
 keywords = ["i18n","czas","localization","internationalization","polish","time","date","datetime","chrono"]
 categories = ["date-and-time","internationalization","localization","value-formatting"]
+exclude = [
+  ".github/*",
+  "examples/*",
+  "target/*",
+  ".gitignore"
+]
 
 [dependencies]
 chrono = "0.4.31"
