@@ -2,6 +2,13 @@ use crate::errors::CzasError;
 
 /// Converts a second or minute value to the Polish Nominative/Mianownik form
 ///
+/// # Examples
+///
+/// ```rust
+/// let second = czas::seconds_or_minutes_to_polish_nominative(1).unwrap();
+/// assert_eq!(second, "jeden");
+/// ```
+///
 /// # Errors
 ///
 /// Will return a [`CzasError`] if !(0 <= `seconds_or_minutes` <= 59)
@@ -55,6 +62,13 @@ pub fn seconds_or_minutes_to_polish_nominative(
 
 /// Converts an hour value to the Polish Locative/Miejscownik form
 ///
+/// # Examples
+///
+/// ```rust
+/// let hour = czas::hours_to_polish_locative(1).unwrap();
+/// assert_eq!(hour, "pierwszej");
+/// ```
+///
 /// # Errors
 ///
 /// Will return a [`CzasError`] if not !(0 <= `hours` <= 23)
@@ -91,6 +105,13 @@ pub fn hours_to_polish_locative(hours: u32) -> Result<String, CzasError> {
 
 /// Converts a day of the month to the Polish Genetive/Dopełniacz form
 ///
+/// # Examples
+///
+/// ```rust
+/// let date = czas::date_to_polish_genitive(1).unwrap();
+/// assert_eq!(date, "pierwszego");
+/// ```
+///
 /// # Errors
 ///
 /// Will return a [`CzasError`] if !(0 <= `date` <= 31)
@@ -126,7 +147,14 @@ pub fn date_to_polish_genitive(date: u32) -> Result<String, CzasError> {
     }
 }
 
-/// Converts month to the Polish Genetive/Dopełniacz form
+/// Converts a month to the Polish Genetive/Dopełniacz form
+///
+/// # Examples
+///
+/// ```rust
+/// let month = czas::month_to_polish_genitive(1).unwrap();
+/// assert_eq!(month, "stycznia");
+/// ```
 ///
 /// # Errors
 ///
@@ -194,6 +222,24 @@ fn century_to_polish_mianownik(year: i32) -> String {
     }
 }
 
+/// Converts a year to the Polish Genetive/Dopełniacz form
+///
+/// # Examples
+///
+/// ```rust
+/// let year = czas::year_to_polish_genetive(2022);
+/// assert_eq!(year, "dwa tysiące dwudziestego drugiego");
+/// ```
+///
+/// ```rust
+/// let year = czas::year_to_polish_genetive(120);
+/// assert_eq!(year, "sto dwudziestego");
+/// ```
+///
+/// ```rust
+/// let year = czas::year_to_polish_genetive(20);
+/// assert_eq!(year, "dwudziestego");
+/// ```
 #[allow(clippy::must_use_candidate)]
 pub fn year_to_polish_genetive(year: i32) -> String {
     let millenium = millenium_to_polish_mianownik(year);
@@ -246,5 +292,16 @@ pub fn year_to_polish_genetive(year: i32) -> String {
         _ => String::new(),
     };
 
-    format!("{millenium}{century} {tens}")
+    let mut base_string = String::new();
+    if !millenium.is_empty() {
+        base_string = format!("{base_string}{millenium} ");
+    }
+    if !century.is_empty() {
+        base_string = format!("{base_string}{century} ");
+    }
+    if !tens.is_empty() {
+        base_string = format!("{base_string}{tens}");
+    }
+
+    base_string
 }

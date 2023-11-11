@@ -1,5 +1,9 @@
-use crate::errors::CzasError;
-use crate::mapping::{
+//! Czas is a library for converting [`chrono`] timestamps into localized text.  
+//! For example, `2020-01-01 01:23:45` would be converted (in Polish) to `pierwszego stycznia dwa tysiące dwudziestego roku o pierwszej dwadzieścia trzy i czterdzieści pięć sekundy`.  
+//! The library provides the public [`ToLocalizedText`] trait, which can be implemented against any struct to provide your own translations in any language/format.  
+//! The library comes with one struct implementation of this trait, [`Czas`], which supports localization in Polish.
+pub use crate::errors::CzasError;
+pub use crate::mapping::polish::{
     date_to_polish_genitive, hours_to_polish_locative, month_to_polish_genitive,
     seconds_or_minutes_to_polish_nominative, year_to_polish_genetive,
 };
@@ -8,6 +12,7 @@ use chrono::{Datelike, NaiveDateTime, Timelike};
 pub mod errors;
 pub mod mapping;
 
+/// Trait for converting [`chrono::NaiveDateTime`] timestamps into localized text
 pub trait ToLocalizedText {
     /// Translates a [`chrono::NaiveDateTime`] timestamp into it's localized text equivalent
     ///
@@ -110,7 +115,7 @@ mod tests {
             String::from(
                 "pierwszego stycznia dwa tysiące dwudziestego roku o pierwszej i jeden sekundy"
             )
-        )
+        );
     }
 
     #[test]
