@@ -1,13 +1,18 @@
 [package]
 name = "czas"
-version = "0.1.0"
+description = "Convert timestamps into localized text"
+version = "0.0.1"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Calem Roelofs"]
+readme = "README.md"
+homepage = "https://github.com/calemroelofs/czas"
+repository = "https://github.com/calemroelofs/czas"
+license = "MIT or Apache-2.0"
+keywords = ["i18n","czas","localization","internationalization","polish","time","date","datetime","chrono"]
+categories = ["date-and-time","internationalization","localization","value-formatting"]
 
 [dependencies]
 chrono = "0.4.31"
-serde = { version = "1.0.192", features = ["serde_derive"] }
 thiserror = "1.0.50"
 
 [lib]
@@ -15,6 +20,6 @@ crate-type=["lib","cdylib"]
 name = "czas"
 test = true
 
-[[example]]
-name = "run"
-path = "examples/run.rs"
+[[bin]]
+name = "czas-teraz"
+path = "src/bin.rs"
