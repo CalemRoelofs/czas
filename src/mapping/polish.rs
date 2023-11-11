@@ -1,21 +1,91 @@
 use crate::errors::CzasError;
 
-/// Converts a second or minute value to the Polish Nominative/Mianownik form
+/// Converts a second value to the Polish Nominative/Mianownik form
 ///
 /// # Examples
 ///
 /// ```rust
-/// let second = czas::seconds_or_minutes_to_polish_nominative(1).unwrap();
-/// assert_eq!(second, "jeden");
+/// let second = czas::seconds_to_polish_nominative(1).unwrap();
+/// assert_eq!(second, "jeden sekunda");
+/// ```
+///
+/// ```rust
+/// let second = czas::seconds_to_polish_nominative(3).unwrap();
+/// assert_eq!(second, "trzy sekundy");
 /// ```
 ///
 /// # Errors
 ///
-/// Will return a [`CzasError`] if !(0 <= `seconds_or_minutes` <= 59)
-pub fn seconds_or_minutes_to_polish_nominative(
-    seconds_or_minutes: u32,
-) -> Result<String, CzasError> {
-    match seconds_or_minutes % 60 {
+/// Will return a [`CzasError`] if !(0 <= `seconds` <= 59)
+pub fn seconds_to_polish_nominative(seconds: u32) -> Result<String, CzasError> {
+    match seconds % 60 {
+        0 => Ok(String::new()),
+        1 => Ok("jeden sekunda".to_string()),
+        2 => Ok("dwa sekundy".to_string()),
+        3 => Ok("trzy sekundy".to_string()),
+        4 => Ok("cztery sekundy".to_string()),
+        5 => Ok("pięć sekund".to_string()),
+        6 => Ok("sześć sekund".to_string()),
+        7 => Ok("siedem sekund".to_string()),
+        8 => Ok("osiem sekund".to_string()),
+        9 => Ok("dziewięć sekund".to_string()),
+        10 => Ok("dziesięć sekund".to_string()),
+        11 => Ok("jedenaście sekund".to_string()),
+        12 => Ok("dwanaście sekund".to_string()),
+        13 => Ok("trzynaście sekund".to_string()),
+        14 => Ok("czternaście sekund".to_string()),
+        15 => Ok("piętnaście sekund".to_string()),
+        16 => Ok("szesnaście sekund".to_string()),
+        17 => Ok("siedemnaście sekund".to_string()),
+        18 => Ok("osiemnaście sekund".to_string()),
+        19 => Ok("dziewiętnaście sekund".to_string()),
+        20 => Ok("dwadzieścia sekund".to_string()),
+        21 => Ok("dwadzieścia jeden sekund".to_string()),
+        22..=29 => Ok(format!(
+            "dwadzieścia {}",
+            seconds_to_polish_nominative(seconds - 20)?
+        )),
+        30 => Ok("trzydzieści sekund".to_string()),
+        31 => Ok("trzydzieści jeden sekund".to_string()),
+        32..=39 => Ok(format!(
+            "trzydzieści {}",
+            seconds_to_polish_nominative(seconds - 30)?
+        )),
+        40 => Ok("czterdzieści sekund".to_string()),
+        41 => Ok("czterdzieści jeden sekund".to_string()),
+        42..=49 => Ok(format!(
+            "czterdzieści {}",
+            seconds_to_polish_nominative(seconds - 40)?
+        )),
+        50 => Ok("pięćdziesiąt sekund".to_string()),
+        51 => Ok("pięćdziesiąt jeden sekund".to_string()),
+        52..=59 => Ok(format!(
+            "pięćdziesiąt {}",
+            seconds_to_polish_nominative(seconds - 50)?
+        )),
+        _ => Err(CzasError::Error),
+    }
+}
+
+/// Converts a minute value to the Polish Nominative/Mianownik form
+///
+/// # Examples
+///
+/// ```rust
+/// let minute = czas::minutes_to_polish_nominative(1).unwrap();
+/// assert_eq!(minute, "jeden");
+/// ```
+///
+/// ```rust
+/// let minute = czas::minutes_to_polish_nominative(19).unwrap();
+/// assert_eq!(minute, "dziewiętnaście");
+/// ```
+///
+/// # Errors
+///
+/// Will return a [`CzasError`] if !(0 <= `minute` <= 59)
+pub fn minutes_to_polish_nominative(minutes: u32) -> Result<String, CzasError> {
+    match minutes % 60 {
         0 => Ok(String::new()),
         1 => Ok("jeden".to_string()),
         2 => Ok("dwa".to_string()),
@@ -39,22 +109,22 @@ pub fn seconds_or_minutes_to_polish_nominative(
         20 => Ok("dwadzieścia".to_string()),
         21..=29 => Ok(format!(
             "dwadzieścia {}",
-            seconds_or_minutes_to_polish_nominative(seconds_or_minutes - 20)?
+            minutes_to_polish_nominative(minutes - 20)?
         )),
         30 => Ok("trzydzieści".to_string()),
         31..=39 => Ok(format!(
             "trzydzieści {}",
-            seconds_or_minutes_to_polish_nominative(seconds_or_minutes - 30)?
+            minutes_to_polish_nominative(minutes - 30)?
         )),
         40 => Ok("czterdzieści".to_string()),
         41..=49 => Ok(format!(
             "czterdzieści {}",
-            seconds_or_minutes_to_polish_nominative(seconds_or_minutes - 40)?
+            minutes_to_polish_nominative(minutes - 40)?
         )),
         50 => Ok("pięćdziesiąt".to_string()),
-        51..=59 => Ok(format!(
+        52..=59 => Ok(format!(
             "pięćdziesiąt {}",
-            seconds_or_minutes_to_polish_nominative(seconds_or_minutes - 50)?
+            minutes_to_polish_nominative(minutes - 50)?
         )),
         _ => Err(CzasError::Error),
     }
