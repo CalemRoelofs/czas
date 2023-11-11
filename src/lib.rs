@@ -4,8 +4,8 @@
 //! The library comes with one struct implementation of this trait, [`Czas`], which supports localization in Polish.
 pub use crate::errors::CzasError;
 pub use crate::mapping::polish::{
-    date_to_polish_genitive, hours_to_polish_locative, month_to_polish_genitive,
-    seconds_or_minutes_to_polish_nominative, year_to_polish_genetive,
+    date_to_polish_genitive, hours_to_polish_locative, minutes_to_polish_nominative,
+    month_to_polish_genitive, seconds_to_polish_nominative, year_to_polish_genetive,
 };
 use chrono::{Datelike, NaiveDateTime, Timelike};
 
@@ -44,8 +44,8 @@ impl ToLocalizedText for Czas {
     ///
     /// Will return a [`CzasError`] if the timestamp is invalid   
     fn from_naive_date_time(timestamp: NaiveDateTime) -> Result<String, CzasError> {
-        let second = seconds_or_minutes_to_polish_nominative(timestamp.second())?;
-        let minute = seconds_or_minutes_to_polish_nominative(timestamp.minute())?;
+        let second = seconds_to_polish_nominative(timestamp.second())?;
+        let minute = minutes_to_polish_nominative(timestamp.minute())?;
         let hour = hours_to_polish_locative(timestamp.hour())?;
         let day = date_to_polish_genitive(timestamp.day())?;
         let month = month_to_polish_genitive(timestamp.month())?;
@@ -56,7 +56,7 @@ impl ToLocalizedText for Czas {
             base_string = format!("{base_string} {minute}");
         };
         if !second.is_empty() {
-            base_string = format!("{base_string} i {second} sekundy");
+            base_string = format!("{base_string} i {second}");
         }
         Ok(base_string)
     }
@@ -92,7 +92,7 @@ mod tests {
 
         assert_eq!(
             result,
-            String::from("dziesiątego listopada dwa tysiące dwudziestego trzeciego roku o dziewiętnastej pięć i czterdzieści sześć sekundy")
+            String::from("dziesiątego listopada dwa tysiące dwudziestego trzeciego roku o dziewiętnastej pięć i czterdzieści sześć sekund")
         );
     }
 
@@ -102,7 +102,7 @@ mod tests {
 
         assert_eq!(
             result,
-            String::from("pierwszego stycznia dwa tysiące dwudziestego roku o pierwszej dwadzieścia trzy i czterdzieści pięć sekundy")
+            String::from("pierwszego stycznia dwa tysiące dwudziestego roku o pierwszej dwadzieścia trzy i czterdzieści pięć sekund")
         );
     }
 
@@ -113,7 +113,7 @@ mod tests {
         assert_eq!(
             result,
             String::from(
-                "pierwszego stycznia dwa tysiące dwudziestego roku o pierwszej i jeden sekundy"
+                "pierwszego stycznia dwa tysiące dwudziestego roku o pierwszej i jeden sekunda"
             )
         );
     }
