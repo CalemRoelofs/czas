@@ -45,7 +45,7 @@ $ cargo install czas
 
 # Then run it
 $ czas-teraz
-2023-11-11 14:33:50.152787900: jedenastego listopada dwa tysiące dwudziestego trzeciego roku o czternastej trzydzieści trzy i pięćdziesiąt sekundy  
+2023-11-11 14:33:50.152787900: jedenastego listopada dwa tysiące dwudziestego trzeciego roku o czternastej trzydzieści trzy i pięćdziesiąt sekund  
 ```
 
 ## Contributing  
